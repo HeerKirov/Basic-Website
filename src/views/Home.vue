@@ -3,10 +3,9 @@
     h1 home
 </template>
 
-<script>
-
-export default {
-  name: 'home',
-  components: {},
-};
+<script lang='ts'>
+import {Component, Vue} from 'vue-property-decorator';
+@Component
+export default class extends Vue {
+}
 </script>
