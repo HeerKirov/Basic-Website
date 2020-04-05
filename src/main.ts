@@ -9,6 +9,7 @@ import config from '@/config';
 import core from '@/sdk/core';
 import localStorage from '@/sdk/utils/storage';
 import userInfo from '@/sdk/modules/user-info';
+import userApp from '@/sdk/modules/user-app';
 import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.config.productionTip = false;
@@ -24,7 +25,7 @@ core.configure({
 })
 .addLoginEvent(loginEvent).addLoginEvent(localStorage.getLoginEvent())
 .addLogoutEvent(logoutEvent).addLogoutEvent(localStorage.getLogoutEvent())
-.load(userInfo)
+.load(userInfo).load(userApp)
 .loadToken(localStorage.loadStorageToken());
 
 new Vue({

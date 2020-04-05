@@ -1,6 +1,6 @@
 export default {
     state: {
-        isLogin: false,
+        isLogin: null,
         username: null,
         name: null,
         cover: null,

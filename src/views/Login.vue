@@ -1,20 +1,23 @@
 <template lang='pug'>
-  el-card.box
-    div.title
-      h3 - 登录 -
-    el-input.mt-2.mb-4(placeholder='请输入用户名', v-model='username')
-    el-input.mb-4(placeholder='请输入密码', show-password, v-model='password')
-    el-row.mb-2
-      el-col(:span='7')
-        el-button(type='success', @click='onLogin', :loading='loading') 
-          i.el-icon-right.left-icon
-          = '登录'
-      el-col(:span='17')
-        el-alert(type='error', :title='alert', v-if='alert', :closable='false')
+  div.div
+    el-card.box
+      div.title
+        h3 - 登录 -
+      el-input.mt-2.mb-4(placeholder='请输入用户名', @keyup.enter.native='onUsernameEnter', v-model='username')
+      el-input.mb-4(ref='password', placeholder='请输入密码', @keyup.enter.native='onLogin', show-password, v-model='password')
+      el-row.mb-2
+        el-col(:span='7')
+          el-button(type='success', @click='onLogin', :loading='loading') 
+            i.el-icon-right.left-icon
+            = '登录'
+        el-col(:span='17')
+          el-alert(type='error', :title='alert', v-if='alert', :closable='false')
+    CaseNumber.bottom-case-number
 </template>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import CaseNumber from '@/components/CaseNumber.vue';
 import {Dict} from '@/common/util';
 import core, {TOKEN_CREATE_REV} from '@/sdk/core';
 
@@ -27,34 +30,24 @@ const LOGIN_ALERT: Dict<string> = {
     PASSWORD_EMPTY: '密码不能为空'
 };
 
-@Component
+@Component({components: {CaseNumber}})
 export default class extends Vue {
-    username: string = '';
-    password: string = '';
-    alert: string|null = null;
-    loading: boolean = false;
-
+    //变量数据
+    private username: string = '';
+    private password: string = '';
+    private alert: string|null = null;
+    private loading: boolean = false;
+    //vue事件
     private beforeCreate() {
         //如果已经登录，那么重定向到主页。
         if(this.$store.state.user.isLogin) {
             this.$router.push({name: 'home'});
         }
     }
-
-    private validate(): boolean {
-        /**验证要提交的表单，并更新错误提示。*/
-        this.alert = null;
-        if(!this.username) {
-            this.alert = LOGIN_ALERT.USERNAME_EMPTY;
-            return false;
-        }
-        if(!this.password) {
-            this.alert = LOGIN_ALERT.PASSWORD_EMPTY;
-            return false;
-        }
-        return true;
+    //UI事件
+    private onUsernameEnter() {
+        (this.$refs.password as any).focus();
     }
-
     private async onLogin() {
         /**事件：按下登录按钮。*/
         if(!this.validate()) {
@@ -68,6 +61,20 @@ export default class extends Vue {
             this.alert = LOGIN_ALERT[TOKEN_CREATE_REV[res.data]] || res.data;
         }
         this.loading = false;
+    }
+    //业务函数
+    private validate(): boolean {
+        /**验证要提交的表单，并更新错误提示。*/
+        this.alert = null;
+        if(!this.username) {
+            this.alert = LOGIN_ALERT.USERNAME_EMPTY;
+            return false;
+        }
+        if(!this.password) {
+            this.alert = LOGIN_ALERT.PASSWORD_EMPTY;
+            return false;
+        }
+        return true;
     }
 }
 </script>
@@ -87,5 +94,11 @@ export default class extends Vue {
   }
   .left-icon {
     padding-right: 5px
+  }
+  .bottom-case-number {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%)
   }
 </style>

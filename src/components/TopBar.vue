@@ -8,12 +8,13 @@
     div.right(v-else)
         el-link(href='#/user-info')
             img.avatar(:src='userCoverURL')
-            = '{{userInfo.name}}'
+            span.hidden-xs-only {{userInfo.name}}
 </template>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import userInfo from '@/sdk/modules/user-info';
+import 'element-ui/lib/theme-chalk/display.css';
 
 @Component
 export default class TopBar extends Vue {

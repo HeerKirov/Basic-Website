@@ -11,8 +11,10 @@ class UserInfo extends CoreModule {
     async updateUserPassword(req: UpdatePasswordReq): Promise<CommonResult<null>> {
         return await this.core!.requestForPost<null>('/api/user/password/', req);
     }
-    async uploadUserCover(form: FormData): Promise<CommonResult<null>> {
-        return this.core!.requestForPost('/api/user/cover/', form);
+    async uploadUserCover(file: File): Promise<CommonResult<null>> {
+        let formData = new FormData();
+        formData.set('file', file);
+        return this.core!.requestForPost('/api/user/cover/', formData);
     }
     getCoverURL(coverFileName: string): string {
         return this.core!.getURL(`/static/cover/${coverFileName}`);

@@ -84,9 +84,12 @@ class Core {
                     update_time: new Date(res.data.update_time)
                 };
                 this.loginEvent.emit(this.auth);
+            }else{
+                this.logoutEvent.emit();
             }
             return trans(res, () => null);
         }else{
+            this.logoutEvent.emit();
             return new Promise((resolve, reject) => resolve({
                 ok: true,
                 data: null,
@@ -133,6 +136,9 @@ class Core {
     }
     private async updateToken(token: string, req: TokenUpdateReq): Promise<CommonResult<TokenRetrieveRes>> {
         return await this.requestForPut<TokenRetrieveRes>(`/api/token/${encodeURIComponent(token)}/`, req);
+    }
+    async register(req: RegisterReq): Promise<CommonResult<null>> {
+        return await this.requestForPost('/api/register/', req);
     }
 
     //axios adapter部分
@@ -221,13 +227,27 @@ export interface LoginReq {
     password: string
 }
 
+export interface RegisterReq {
+    username: string
+    name: string
+    password: string
+    code: string|null
+}
+
 export const TOKEN_CREATE_CODE = {
     PASSWORD_WRONG: 'Password wrong',
     USER_NOT_EXIST: 'User not exist',
     USER_NOT_ENABLED: 'User not enabled'
 };
+export const REGISTER_CODE = {
+    DISABLED_REGISTRATION_CODE: 'Disabled registration code',
+    NEED_REGISTRATION_CODE: 'Need registration code',
+    USERNAME_EXIST: 'Username exist',
+    REGISTER_CLOSED: 'Register closed'
+}
 
 export const TOKEN_CREATE_REV = reverse(TOKEN_CREATE_CODE);
+export const REGISTER_REV = reverse(REGISTER_CODE);
 
 const core = new Core();
 
