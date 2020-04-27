@@ -11,12 +11,12 @@
                     el-button(slot='append', icon='el-icon-check', @click='onSubmitName')
                 div.f-15
                     span @{{data.username}}
-                el-link.mt-3(href='#/admin', v-if='data.is_staff')
+                el-link.mt-3(href='#/admin', v-if='data.isStaff')
                     i.el-icon-s-custom
                     = '系统管理员'
                 div.f-13.mt-4
                     span.mr-1 注册时间
-                    span {{toDateTimeString(data.create_time)}}
+                    span {{toDateTimeString(data.createTime)}}
                 div.float-right.mt-4
                     el-link(@click='onLogout')
                         i.el-icon-s-unfold

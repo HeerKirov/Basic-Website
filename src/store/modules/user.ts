@@ -4,11 +4,11 @@ export default {
         username: null,
         name: null,
         cover: null,
-        is_staff: null,
+        isStaff: null,
 
         token: null,
-        expire_time: null,
-        update_time: null
+        expireTime: null,
+        updateTime: null
     },
     getters: {
         userInfo(state: any) {
@@ -16,27 +16,27 @@ export default {
                 username: state.username,
                 name: state.name,
                 cover: state.cover,
-                is_staff: state.is_staff
+                isStaff: state.isStaff
             }
         },
         token(state: any) {
             return {
                 token: state.token,
-                expire_time: state.expire_time,
-                update_time: state.update_time
+                expireTime: state.expireTime,
+                updateTime: state.updateTime
             }
         }
     },
     mutations: {
-        updateToken(state: any, body: {token: string, expire_time: Date, update_time: Date}) {
+        updateToken(state: any, body: {token: string, expireTime: Date, updateTime: Date}) {
             state.token = body.token;
-            state.expire_time = body.expire_time;
-            state.update_time = body.update_time;
+            state.expireTime = body.expireTime;
+            state.updateTime = body.updateTime;
             if(!state.isLogin) {
                 state.isLogin = true;
             }
         },
-        updateUserInfo(state: any, body: {username?: string, name?: string, cover?: string, is_staff?: boolean}) {
+        updateUserInfo(state: any, body: {username?: string, name?: string, cover?: string, isStaff?: boolean}) {
             if(body.username != undefined) {
                 state.username = body.username;
             }
@@ -46,8 +46,8 @@ export default {
             if(body.cover != undefined) {
                 state.cover = body.cover;
             }
-            if(body.is_staff != undefined) {
-                state.is_staff = body.is_staff;
+            if(body.isStaff != undefined) {
+                state.isStaff = body.isStaff;
             }
             if(!state.isLogin) {
                 state.isLogin = true;
@@ -59,8 +59,8 @@ export default {
             state.name = null;
             state.cover = null;
             state.token = null;
-            state.expire_time = null;
-            state.update_time = null;
+            state.expireTime = null;
+            state.updateTime = null;
         }
     },
     actions: {

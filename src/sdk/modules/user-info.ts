@@ -9,7 +9,10 @@ class UserInfo extends CoreModule {
         return trans(await this.core!.requestForPost<UserInfoRetrieveRes>('/api/user/', req), transUserInfo);
     }
     async updateUserPassword(req: UpdatePasswordReq): Promise<CommonResult<null>> {
-        return await this.core!.requestForPost<null>('/api/user/password/', req);
+        return await this.core!.requestForPost<null>('/api/user/password/', {
+            old_password: req.oldPassword,
+            new_password: req.newPassword
+        });
     }
     async uploadUserCover(file: File): Promise<CommonResult<null>> {
         let formData = new FormData();
@@ -26,11 +29,11 @@ function transUserInfo(r: UserInfoRetrieveRes): UserInfoRes {
         username: r.username,
         name: r.name,
         cover: r.cover,
-        is_staff: r.is_staff,
-        last_login: r.last_login ? new Date(r.last_login) : null,
-        last_login_ip: r.last_login_ip,
-        create_time: new Date(r.create_time),
-        update_time: new Date(r.update_time)
+        isStaff: r.is_staff,
+        lastLogin: r.last_login ? new Date(r.last_login) : null,
+        lastLoginIp: r.last_login_ip,
+        createTime: new Date(r.create_time),
+        updateTime: new Date(r.update_time)
     }
 }
 
@@ -49,11 +52,11 @@ export interface UserInfoRes {
     username: string
     name: string
     cover: string|null
-    is_staff: boolean
-    last_login: Date|null
-    last_login_ip: string|null
-    create_time: Date
-    update_time: Date
+    isStaff: boolean
+    lastLogin: Date|null
+    lastLoginIp: string|null
+    createTime: Date
+    updateTime: Date
 }
 
 export interface UpdateUserInfoReq {
@@ -61,10 +64,8 @@ export interface UpdateUserInfoReq {
 }
 
 export interface UpdatePasswordReq {
-    old_password: string
-    new_password: string
+    oldPassword: string
+    newPassword: string
 }
 
-const userInfo = new UserInfo();
-
-export default userInfo;
+export default new UserInfo();

@@ -5,8 +5,9 @@
             el-button(size='mini', :type='listType == "my" ? "primary" : undefined', plain, @click='onTabClick("my")', icon='el-icon-collection') 我的应用
             el-button(size='mini', :type='listType == "all" ? "primary" : undefined', plain, @click='onTabClick("all")', icon='el-icon-receiving') 全部应用
     el-row
-        el-col(:xs='spanOfCard.xs', :sm='spanOfCard.sm', :md='spanOfCard.md', :lg='spanOfCard.lg', :xl='spanOfCard.xl')
-            AppCard(v-for='(item, index) in data', :key='item.app.app_id', :title='item.app.name', :url='item.app.url', :unPublic='!item.public_app', :description='item.app.description')
+        el-col(v-for='(item, index) in data', :key='item.app.appId', :xs='spanOfCard.xs', :sm='spanOfCard.sm', :md='spanOfCard.md', :lg='spanOfCard.lg', :xl='spanOfCard.xl')
+            AppCard(:title='item.app.name', :url='item.app.url', :un-public='!item.publicApp', :description='item.app.description')
+    CaseNumber
 </template>
 
 <script lang='ts'>
@@ -17,24 +18,24 @@ import core from '@/sdk/core';
 import userApp, {AppInfoRes, UseInfoRes} from '@/sdk/modules/user-app';
 
 interface Data {
-    public_app?: boolean
-    last_use?: Date
-    create_time?: Date
+    publicApp?: boolean
+    lastUse?: Date
+    createTime?: Date
     app: AppInfoRes
 }
 
 const AdminApp: Data = {
     app: {
-        app_id: 'admin',
+        appId: 'admin',
         name: '管理员控制台',
         description: '基础服务的管理控制台。',
         url: {
             'index': '#/admin'
         },
-        create_time: new Date('1970-01-01T00:00:00.000Z'),
-        update_time: new Date('1970-01-01T00:00:00.000Z')
+        createTime: new Date('1970-01-01T00:00:00.000Z'),
+        updateTime: new Date('1970-01-01T00:00:00.000Z')
     },
-    public_app: false
+    publicApp: false
 };
 
 @Component({components: {CaseNumber, AppCard}})
@@ -49,14 +50,17 @@ export default class extends Vue {
     private get logined(): boolean|null {
         if(this.isLogin == null) {
             let logined = this.$store.state.user.isLogin;
-            if(logined === true) {
-                this.listType = "my";
-                this.requestForList();
-                this.isLogin = true;
-            }else if(logined === false) {
-                this.listType = "all";
-                this.requestForList();
-                this.isLogin = false;
+            let staff = this.$store.state.user.isStaff;
+            if(staff != null) {
+                if(logined === true) {
+                    this.listType = "my";
+                    this.requestForList();
+                    this.isLogin = true;
+                }else if(logined === false) {
+                    this.listType = "all";
+                    this.requestForList();
+                    this.isLogin = false;
+                }
             }
         }
         return this.isLogin;
@@ -73,7 +77,7 @@ export default class extends Vue {
         if(this.listType === "my") {
             let res = await userApp.getUsingAppList();
             if(res.ok) {
-                if(this.$store.state.user.is_staff) {
+                if(this.$store.state.user.isStaff) {
                     this.data = (res.data as Data[]).concat([AdminApp]);
                 }else{
                     this.data = res.data as Data[];
@@ -88,7 +92,7 @@ export default class extends Vue {
         }else{
             let res = await userApp.getAppList();
             if(res.ok) {
-                this.data = res.data.map(appInfo => {return{app: appInfo, public_app: true}});
+                this.data = res.data.map(appInfo => {return{app: appInfo, publicApp: true}});
             }else{
                 this.$notify.error({
                     title: '错误',

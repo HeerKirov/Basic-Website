@@ -18,21 +18,21 @@ class UserApp extends CoreModule {
 
 function transAppInfo(r: AppInfoRetrieveRes): AppInfoRes {
     return {
-        app_id: r.app_id,
+        appId: r.app_id,
         name: r.name,
         description: r.description,
         url: r.url,
-        create_time: new Date(r.create_time),
-        update_time: new Date(r.update_time)
+        createTime: new Date(r.create_time),
+        updateTime: new Date(r.update_time)
     }
 }
 
 function transUseInfo(r: UseInfoRetrieveRes): UseInfoRes {
     return {
         app: transAppInfo(r.app),
-        public_app: r.public_app,
-        last_use: r.last_use != null ? new Date(r.last_use) : null,
-        create_time: new Date(r.create_time)
+        publicApp: r.public_app,
+        lastUse: r.last_use != null ? new Date(r.last_use) : null,
+        createTime: new Date(r.create_time)
     }
 }
 
@@ -53,21 +53,19 @@ interface UseInfoRetrieveRes {
 }
 
 export interface AppInfoRes {
-    app_id: string
+    appId: string
     name: string
     description: string
     url: {[t: string]: string}
-    create_time: Date
-    update_time: Date
+    createTime: Date
+    updateTime: Date
 }
 
 export interface UseInfoRes {
-    public_app: boolean
-    last_use: Date|null
-    create_time: Date
+    publicApp: boolean
+    lastUse: Date|null
+    createTime: Date
     app: AppInfoRes
 }
 
-const userApp = new UserApp();
-
-export default userApp;
+export default new UserApp();

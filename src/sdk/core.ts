@@ -11,8 +11,8 @@ export interface Configuration {
 export interface Auth {
     token: string
     username?: string
-    expire_time?: Date
-    update_time?: Date
+    expireTime?: Date
+    updateTime?: Date
 }
 
 function result<R>(response: AxiosResponse<any>): CommonResult<R> {
@@ -80,8 +80,8 @@ class Core {
                 this.auth = {
                     token: res.data.key,
                     username: res.data.username,
-                    expire_time: new Date(res.data.expire_time),
-                    update_time: new Date(res.data.update_time)
+                    expireTime: new Date(res.data.expire_time),
+                    updateTime: new Date(res.data.update_time)
                 };
                 this.loginEvent.emit(this.auth);
             }else{
@@ -90,7 +90,7 @@ class Core {
             return trans(res, () => null);
         }else{
             this.logoutEvent.emit();
-            return new Promise((resolve, reject) => resolve({
+            return new Promise((resolve, _) => resolve({
                 ok: true,
                 data: null,
                 status: 200
@@ -107,8 +107,8 @@ class Core {
             this.auth = {
                 token: res.data.key,
                 username: res.data.username,
-                expire_time: new Date(res.data.expire_time),
-                update_time: new Date(res.data.update_time)
+                expireTime: new Date(res.data.expire_time),
+                updateTime: new Date(res.data.update_time)
             };
             this.loginEvent.emit(this.auth);
         }

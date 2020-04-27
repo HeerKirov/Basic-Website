@@ -9,8 +9,8 @@ Vue.use(Vuex);
 export async function loginEvent(auth?: Auth) {
     store.commit('updateToken', {
         token: auth!.token,
-        expire_time: auth!.expire_time,
-        update_time: auth!.update_time
+        expireTime: auth!.expireTime,
+        updateTime: auth!.updateTime
     });
     let info = await userInfo.getUserInfo();
     if(info.ok) {
@@ -18,7 +18,7 @@ export async function loginEvent(auth?: Auth) {
             username: info.data.username,
             name: info.data.name,
             cover: info.data.cover,
-            is_staff: info.data.is_staff
+            isStaff: info.data.isStaff
         })
     }
 }
