@@ -49,7 +49,6 @@ import userInfo from '@/sdk/modules/user-info';
 import adminUser, { UserInfoRes } from '@/sdk/modules/admin-user';
 import UserDetailDialog from '@/components/UserDetailDialog.vue';
 import UserCreateDialog from '@/components/UserCreateDialog.vue';
-import user from '../store/modules/user';
 
 @Component({components: {UserDetailDialog, UserCreateDialog}})
 export default class extends Vue {

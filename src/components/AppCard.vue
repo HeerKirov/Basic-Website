@@ -1,7 +1,6 @@
 <template lang="pug">
     el-card.card
-        i.app-id(v-if='appId') {{appId}}
-        div.mb-2.mt-4
+        div.mb-2.mt-2
             el-link(:href='href', target='_blank', @click='onClickTitle') 
                 h3.mt-0.mb-1 {{title}}
             el-tooltip.item(v-if='unPublic', effect='dark', content='非公开', placement='right')
@@ -54,10 +53,6 @@ export default class TopBar extends Vue {
         margin: 6px;
         padding-bottom: 6px;
         position: relative;
-    }
-    .app-id {
-        font-size: 10px;
-        position: absolute;
     }
     .description {
         font-size: 13px;
