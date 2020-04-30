@@ -1,6 +1,6 @@
 <template lang='pug'>
-  div.home(v-if='logined')
-    el-row.tab-title-row(v-if='isLogin')
+  div.home
+    el-row.tab-title-row(v-if='logined')
         el-button-group.tab-title
             el-button(size='mini', :type='listType == "my" ? "primary" : undefined', plain, @click='onTabClick("my")', icon='el-icon-collection') 我的应用
             el-button(size='mini', :type='listType == "all" ? "primary" : undefined', plain, @click='onTabClick("all")', icon='el-icon-receiving') 全部应用
@@ -52,6 +52,8 @@ export default class extends Vue {
             let logined = this.$store.state.user.isLogin;
             let staff = this.$store.state.user.isStaff;
             if(staff != null) {
+                console.log('staff is not null')
+                console.log('logined is ' + logined)
                 if(logined === true) {
                     this.listType = "my";
                     this.requestForList();

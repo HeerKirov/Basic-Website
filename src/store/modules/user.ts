@@ -55,6 +55,7 @@ export default {
         },
         clear(state: any) {
             state.isLogin = false;
+            state.isStaff = false;
             state.username = null;
             state.name = null;
             state.cover = null;
