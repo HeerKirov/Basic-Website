@@ -1,12 +1,12 @@
 <template lang='pug'>
   div.top-bar.noselect
     div.left
-        el-link(href='#/', :underline='false') HEERKIROV.COM
+        el-link(href='/', :underline='false') HEERKIROV.COM
     div.right(v-if='!isLogin')
-        el-link.button(href='#/login') 登录
-        el-link.button(href='#/register') 注册
+        el-link.button(href='/login') 登录
+        el-link.button(href='/register') 注册
     div.right(v-else)
-        el-link(href='#/user-info')
+        el-link(href='/user-info')
             img.avatar(:src='userCoverURL')
             span.hidden-xs-only {{userInfo.name}}
 </template>

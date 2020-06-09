@@ -11,7 +11,7 @@
                     el-button(slot='append', icon='el-icon-check', @click='onSubmitName')
                 div.f-15
                     span @{{data.username}}
-                el-link.mt-3(href='#/admin', v-if='data.isStaff')
+                el-link.mt-3(href='/admin', v-if='data.isStaff')
                     i.el-icon-s-custom
                     = '系统管理员'
                 div.f-13.mt-4

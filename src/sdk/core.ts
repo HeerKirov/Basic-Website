@@ -6,6 +6,7 @@ import { reverse } from './utils/util';
 export interface Configuration {
     SERVER_URL: string
     EFFECTIVE_TIME: number|null
+    TOKEN_UPDATE_INTERVAL: number|null
 }
 
 export interface Auth {
@@ -43,7 +44,8 @@ export function trans<T, R>(r: CommonResult<T>, translate: (t: T) => R): CommonR
 class Core {
     config: Configuration = {
         SERVER_URL: 'http://basic-service',
-        EFFECTIVE_TIME: null
+        EFFECTIVE_TIME: null,
+        TOKEN_UPDATE_INTERVAL: null
     };
     auth: Auth|null = null;
 
@@ -84,6 +86,7 @@ class Core {
                     updateTime: new Date(res.data.update_time)
                 };
                 this.loginEvent.emit(this.auth);
+                this.checkAndUpdateToken();
             }else{
                 this.logoutEvent.emit();
             }
@@ -126,6 +129,18 @@ class Core {
         this.logoutEvent.addListener(call);
         return this;
     }
+    private async checkAndUpdateToken() {
+        if(this.auth != null && this.config.EFFECTIVE_TIME != null && this.config.TOKEN_UPDATE_INTERVAL != null) {
+            if(this.auth.updateTime != null && Date.now() - this.auth.updateTime.getTime() >= this.config.TOKEN_UPDATE_INTERVAL) {
+                let res = await this.updateToken(this.auth.token, {effective: this.config.EFFECTIVE_TIME});
+                if(res.ok) {
+                    let {expire_time, update_time} = res.data;
+                    this.auth.expireTime = new Date(expire_time);
+                    this.auth.updateTime = new Date(update_time);
+                }
+            }
+        }
+    }
 
     //API部分 
     private async createToken(req: TokenCreateReq): Promise<CommonResult<TokenRetrieveRes>> {
@@ -135,7 +150,7 @@ class Core {
         return await this.requestForGet<TokenRetrieveRes>(`/api/token/${encodeURIComponent(token)}/`);
     }
     private async updateToken(token: string, req: TokenUpdateReq): Promise<CommonResult<TokenRetrieveRes>> {
-        return await this.requestForPut<TokenRetrieveRes>(`/api/token/${encodeURIComponent(token)}/`, req);
+        return await this.requestForPut<TokenRetrieveRes>(`/api/token/${encodeURIComponent(token)}/`, req, false);
     }
     async register(req: RegisterReq): Promise<CommonResult<null>> {
         return await this.requestForPost('/api/register/', req);
@@ -147,6 +162,7 @@ class Core {
     }
     private async requestForGet<T>(url: string, params?: any): Promise<CommonResult<T>> {
         try {
+            this.checkAndUpdateToken();
             return result(await axios.get(this.config.SERVER_URL + url, {params, headers: this.getHeaders()}));
         }catch(e) {
             return {
@@ -158,6 +174,7 @@ class Core {
     }
     private async requestForPost<T>(url: string, data?: any): Promise<CommonResult<T>> {
         try {
+            this.checkAndUpdateToken();
             return result(await axios.post(this.config.SERVER_URL + url, data, {headers: this.getHeaders()}));
         }catch(e) {
             return {
@@ -167,8 +184,11 @@ class Core {
             };
         }
     }
-    private async requestForPut<T>(url: string, data?: any): Promise<CommonResult<T>> {
+    private async requestForPut<T>(url: string, data?: any, checkAndUpdateToken: Boolean = true): Promise<CommonResult<T>> {
         try {
+            if(checkAndUpdateToken) {
+                this.checkAndUpdateToken();
+            }
             return result(await axios.put(this.config.SERVER_URL + url, data, {headers: this.getHeaders()}));
         }catch(e) {
             return {
@@ -180,6 +200,7 @@ class Core {
     }
     private async requestForDelete<T>(url: string): Promise<CommonResult<T>> {
         try {
+            this.checkAndUpdateToken();
             return result(await axios.delete(this.config.SERVER_URL + url, {headers: this.getHeaders()}));
         }catch(e) {
             return {

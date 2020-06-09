@@ -30,7 +30,7 @@ const AdminApp: Data = {
         name: '管理员控制台',
         description: '基础服务的管理控制台。',
         url: {
-            'index': '#/admin'
+            'index': '/admin'
         },
         createTime: new Date('1970-01-01T00:00:00.000Z'),
         updateTime: new Date('1970-01-01T00:00:00.000Z')
@@ -52,8 +52,6 @@ export default class extends Vue {
             let logined = this.$store.state.user.isLogin;
             let staff = this.$store.state.user.isStaff;
             if(staff != null) {
-                console.log('staff is not null')
-                console.log('logined is ' + logined)
                 if(logined === true) {
                     this.listType = "my";
                     this.requestForList();

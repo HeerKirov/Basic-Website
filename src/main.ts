@@ -25,7 +25,8 @@ localStorage.setPrefix(config.STORAGE_PREFIX);
 
 core.configure({
     SERVER_URL: config.SERVER_URL,
-    EFFECTIVE_TIME: 1000 * 60 * 60 * 24 * 7
+    EFFECTIVE_TIME: 1000 * 60 * 60 * 24 * 7,    //每次申请的token有效期为7天
+    TOKEN_UPDATE_INTERVAL: 1000 * 60 * 60 * 12  //每当经过12小时，就更新token有效期
 })
 .addLoginEvent(loginEvent).addLoginEvent(localStorage.getLoginEvent())
 .addLogoutEvent(logoutEvent).addLogoutEvent(localStorage.getLogoutEvent())
