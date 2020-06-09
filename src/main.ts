@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import ElementUI from 'element-ui';
 import App from './App.vue';
 import router from './router';
 import store, { loginEvent, logoutEvent } from './store';
@@ -15,11 +14,11 @@ import adminCode from '@/sdk/modules/admin-code';
 import adminSetting from '@/sdk/modules/admin-setting';
 import adminUser from '@/sdk/modules/admin-user';
 import 'element-ui/lib/theme-chalk/index.css';
+import './element-ui';
 
 Vue.config.productionTip = false;
 
 Vue.use(VueAxios, axios);
-Vue.use(ElementUI);
 
 localStorage.setPrefix(config.STORAGE_PREFIX);
 

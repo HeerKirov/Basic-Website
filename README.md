@@ -5,6 +5,7 @@ basic service服务的前端实现。作为主页提供用户、App列表、管�
 ### v0.1.1
 * 添加token刷新机制。
 * router更改至history模式。
+* 将element-ui更改至部分引入，优化编译。
 
 ## build & run
 在开始编译之前，编辑`src/config.ts`配置文件，指定合适的配置。
